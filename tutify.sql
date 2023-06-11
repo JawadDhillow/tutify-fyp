@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2023 at 11:47 AM
--- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Jun 11, 2023 at 07:31 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,7 +42,8 @@ CREATE TABLE `assesment` (
 --
 
 INSERT INTO `assesment` (`assesment_title`, `assesment_type`, `assesment_description`, `due_date`, `attachment_files`, `course_id`, `assesment_id`) VALUES
-('Cloud', 'assignment', '<p>please submit on time</p>', '2023-05-26', 0x2e2e2f75706c6f6164732f6173736573736d656e74732f36343665343934393138373162342e39353133353730342e706466, 1, 2);
+('1', 'assignment', '<p>fghjkl;</p>', '2023-06-10', 0x2e2e2f75706c6f6164732f6173736573736d656e74732f36343833373237376336326230312e32363733303935322e706466, 1, 3),
+('3', 'assignment', '<p>sdfghjkl;</p>', '2023-06-16', 0x2e2e2f75706c6f6164732f6173736573736d656e74732f36343833373239356436646434302e39353836323933302e706466, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -70,7 +71,7 @@ CREATE TABLE `course` (
   `course_duration` varchar(255) NOT NULL,
   `course_price` int(255) NOT NULL,
   `course_description` varchar(255) NOT NULL,
-  `id` int(255) NOT NULL,
+  `instructor_id` int(255) NOT NULL,
   `course_image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -78,9 +79,9 @@ CREATE TABLE `course` (
 -- Dumping data for table `course`
 --
 
-INSERT INTO `course` (`course_name`, `course_id`, `course_intsructor`, `course_duration`, `course_price`, `course_description`, `id`, `course_image`) VALUES
-('Computer Science', 1, 'Muhammad Sameer', '2 months', 5000, 'this is for matric Students', 0, 'computerr.jpeg'),
-('Physics ', 2, 'Muhammad Sameer', '2 months', 5000, 'this course is for first year students', 0, 'physc.png');
+INSERT INTO `course` (`course_name`, `course_id`, `course_intsructor`, `course_duration`, `course_price`, `course_description`, `instructor_id`, `course_image`) VALUES
+('new', 2, 'Muhammad Sameer', '3 months', 0, 'new course', 2, 'vimal-s-TAWu_hKjwu8-unsplash.jpg'),
+('urdu', 3, 'Muhammad Sameer', '3 months', 50000, 'urdu a', 2, 'vimal-s-TAWu_hKjwu8-unsplash.jpg');
 
 -- --------------------------------------------------------
 
@@ -96,14 +97,6 @@ CREATE TABLE `course_content` (
   `content_file` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `course_content`
---
-
-INSERT INTO `course_content` (`content_id`, `course_id`, `content_title`, `content_type`, `content_file`, `created_at`) VALUES
-(1, 1, 'cloud Computing', 'documents', '../uploads/content/646e317aec4d56.84185339.pdf', '2023-05-24 15:47:06'),
-(2, 1, 'cloud Computing A2', 'slides', '../uploads/content/646e319a7951f7.81023097.pdf', '2023-05-24 15:47:38');
 
 -- --------------------------------------------------------
 
@@ -126,8 +119,29 @@ CREATE TABLE `enrolmentt` (
 --
 
 INSERT INTO `enrolmentt` (`enrolment_id`, `user_id`, `course_id`, `type`, `enrolment_date`, `user_name`, `course_name`) VALUES
-(1, 3, 1, '', '2023-05-24 19:31:04', 'Abdullah', 'Computer Science'),
-(2, 3, 1, '', '2023-05-25 06:36:31', 'Abdullah', 'Computer Science');
+(3, 3, 1, '', '2023-06-09 19:27:07', 'Abdullah', 'Computer'),
+(4, 5, 3, '', '2023-06-11 11:45:42', 'talha', 'urdu');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `grades`
+--
+
+CREATE TABLE `grades` (
+  `id` int(255) NOT NULL,
+  `course_id` int(255) NOT NULL,
+  `assesment_id` int(255) NOT NULL,
+  `user_id` int(255) NOT NULL,
+  `grade` int(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `grades`
+--
+
+INSERT INTO `grades` (`id`, `course_id`, `assesment_id`, `user_id`, `grade`) VALUES
+(9, 1, 3, 3, 20);
 
 -- --------------------------------------------------------
 
@@ -150,7 +164,7 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `user_id`, `message`, `created_at`, `is_read`, `user_name`, `type`) VALUES
-(0, 0, 'notification', '2023-05-24 19:56:35', 0, 'Muhammad Sameer', 'info');
+(0, 0, 'notification', '2023-05-24 19:56:35', 1, 'Muhammad Sameer', 'info');
 
 -- --------------------------------------------------------
 
@@ -176,17 +190,21 @@ CREATE TABLE `payment` (
   `course_price` float NOT NULL,
   `course_instructor` varchar(255) NOT NULL,
   `user_id` int(255) NOT NULL,
+  `instructor_id` int(255) NOT NULL,
   `tutor_fee` int(255) NOT NULL,
-  `platform_fee` int(255) NOT NULL
+  `platform_fee` int(255) NOT NULL,
+  `salary_check` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`id`, `fullname`, `email`, `address`, `city`, `state`, `zip`, `cardname`, `cardnumber`, `expmonth`, `expyear`, `cvv`, `course_name`, `course_id`, `course_price`, `course_instructor`, `user_id`, `tutor_fee`, `platform_fee`) VALUES
-(1, 'Abdullah', 'addullaharshadchoudhary@gmail.com', 'kot peer fazal shah', 'Lahore', 'Punjab', '55260', 'Abdullah', 'UjC3+KBhY+F3OgEf69ExpQ==', 'ju', '2025', '336', 'Computer Science', 1, 5000, 'Muhammad Sameer', 3, 4750, 250),
-(2, 'Abdullah', 'addullaharshadchoudhary@gmail.com', 'kot peer fazal shah', 'Lahore', 'Punjab', '55260', 'Abdullah', 'sqnLeydFKWC3ZhSHnDsl1HxWN9NH5oKYRM1tvD+LeAw=', 'ju', '2023', '335', 'Computer Science', 1, 5000, 'Muhammad Sameer', 3, 4750, 250);
+INSERT INTO `payment` (`id`, `fullname`, `email`, `address`, `city`, `state`, `zip`, `cardname`, `cardnumber`, `expmonth`, `expyear`, `cvv`, `course_name`, `course_id`, `course_price`, `course_instructor`, `user_id`, `instructor_id`, `tutor_fee`, `platform_fee`, `salary_check`) VALUES
+(1, 'Abdullah', 'addullaharshadchoudhary@gmail.com', 'kot peer fazal shah', 'Lahore', 'Punjab', '55260', 'Abdullah', 'UjC3+KBhY+F3OgEf69ExpQ==', 'ju', '2025', '336', 'Computer Science', 1, 5000, 'Muhammad Sameer', 3, 0, 4750, 250, 1),
+(2, 'Abdullah', 'addullaharshadchoudhary@gmail.com', 'kot peer fazal shah', 'Lahore', 'Punjab', '55260', 'Abdullah', 'sqnLeydFKWC3ZhSHnDsl1HxWN9NH5oKYRM1tvD+LeAw=', 'ju', '2023', '335', 'Computer Science', 1, 5000, 'Muhammad Sameer', 3, 0, 4750, 250, 1),
+(3, 'Abdullah', 'addullaharshadchoudhary@gmail.com', 'kot peer fazal shah', 'Lahore', 'Punjab', '55260', 'Abdullah', 'I3M5C6xPu6Fhb4LeHlF3MZ7mXile/9FnvRZ+n1rONMc=', 'ju', '2025', '335', 'Computer', 1, 5000, 'Muhammad Sameer', 4, 0, 4750, 250, 0),
+(4, 'talha', 'talha@gmail.com', '', '', '', '', 'talha', 'Nwf4xCfGDRVl6eE0OLa5zg==', 'ju', '2019', '456', 'urdu', 3, 50000, 'Muhammad Sameer', 5, 2, 45000, 5000, 1);
 
 -- --------------------------------------------------------
 
@@ -203,7 +221,7 @@ CREATE TABLE `platform_fee` (
 --
 
 INSERT INTO `platform_fee` (`platform_percentage`) VALUES
-(5);
+(10);
 
 -- --------------------------------------------------------
 
@@ -219,7 +237,6 @@ CREATE TABLE `quiz_questions` (
   `option3` varchar(500) NOT NULL,
   `option4` varchar(500) NOT NULL,
   `correct_answer` varchar(110) NOT NULL,
-  `subject` varchar(500) NOT NULL,
   `marks` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -230,12 +247,15 @@ CREATE TABLE `quiz_questions` (
 -- Dumping data for table `quiz_questions`
 --
 
-INSERT INTO `quiz_questions` (`id`, `question`, `option1`, `option2`, `option3`, `option4`, `correct_answer`, `subject`, `marks`, `created_at`, `updated_at`, `course_id`) VALUES
-(1, 'What is the main function of an operating system?', 'Running applications', 'Managing hardware resources', 'Providing internet connectivity', 'Creating graphical user interfaces', 'Managing hardware resources', '1', 2, '2023-05-24 17:32:31', '2023-05-24 17:32:31', 0),
-(2, 'What does HTML stand for?', 'HyperText Markup Language', 'High Technical Markup Language', 'Home Tool Markup Language', ' Hyperlink Text Markup Language', ' HyperText Markup Language', '1', 1, '2023-05-24 17:33:08', '2023-05-24 17:33:08', 0),
-(3, 'Which programming language is known for its use in artificial intelligence and machine learning?', 'Python', 'Java', 'C++', ' Ruby', 'Python', '1', 2, '2023-05-24 17:33:51', '2023-05-24 17:33:51', 0),
-(4, 'What is the purpose of a firewall in computer networks?', 'To prevent unauthorized access', 'To increase network speed', 'To provide wireless connectivity', 'To store and manage data', 'To prevent unauthorized access', '1', 2, '2023-05-24 17:34:28', '2023-05-24 17:34:28', 0),
-(5, 'What is the binary representation of the decimal number 10?', '1010', '1100', '1001', '1110', '1010', '1', 1, '2023-05-24 17:34:53', '2023-05-24 17:34:53', 0);
+INSERT INTO `quiz_questions` (`id`, `question`, `option1`, `option2`, `option3`, `option4`, `correct_answer`, `marks`, `created_at`, `updated_at`, `course_id`) VALUES
+(1, 'What is the main function of an operating system?', 'Running applications', 'Managing hardware resources', 'Providing internet connectivity', 'Creating graphical user interfaces', 'Managing hardware resources', 2, '2023-05-24 17:32:31', '2023-06-09 19:25:44', 1),
+(2, 'What does HTML stand for?', 'HyperText Markup Language', 'High Technical Markup Language', 'Home Tool Markup Language', ' Hyperlink Text Markup Language', ' HyperText Markup Language', 1, '2023-05-24 17:33:08', '2023-06-09 19:28:27', 1),
+(3, 'Which programming language is known for its use in artificial intelligence and machine learning?', 'Python', 'Java', 'C++', ' Ruby', 'Python', 2, '2023-05-24 17:33:51', '2023-06-09 19:28:32', 1),
+(4, 'What is the purpose of a firewall in computer networks?', 'To prevent unauthorized access', 'To increase network speed', 'To provide wireless connectivity', 'To store and manage data', 'To prevent unauthorized access', 2, '2023-05-24 17:34:28', '2023-06-09 19:28:35', 1),
+(5, 'What is the binary representation of the decimal number 10?', '1010', '1100', '1001', '1110', '1010', 1, '2023-05-24 17:34:53', '2023-06-09 19:28:40', 1),
+(6, 'What is the plural form of \"child\"?', 'Childs', 'Childes', 'Children', 'none of above', 'Children', 1, '2023-06-09 19:21:43', '2023-06-09 19:28:43', 1),
+(8, 'hum apky hen kon?', 'Dost', 'Muhabbat', 'dsjkh', 'none of above', 'none of above', 1, '2023-06-09 19:22:52', '2023-06-09 19:28:50', 1),
+(9, 'kiya hall hen', 'bs theek', 'theek', 'nhi theek', 'none of above', 'theek', 1, '2023-06-09 19:34:06', '2023-06-09 19:34:06', 1);
 
 -- --------------------------------------------------------
 
@@ -255,7 +275,31 @@ CREATE TABLE `quiz_results` (
 --
 
 INSERT INTO `quiz_results` (`id`, `course_id`, `score`, `user_id`) VALUES
-(3, 0, 80, 0);
+(4, 1, 0, 0),
+(5, 1, 0, 0),
+(6, 1, 25, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salary`
+--
+
+CREATE TABLE `salary` (
+  `id` int(255) NOT NULL,
+  `tutor_name` varchar(255) NOT NULL,
+  `tutor_id` int(255) NOT NULL,
+  `amount` int(255) NOT NULL,
+  `withdraw_check` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `salary`
+--
+
+INSERT INTO `salary` (`id`, `tutor_name`, `tutor_id`, `amount`, `withdraw_check`) VALUES
+(3, 'Muhammad Sameer', 2, 4000, 1),
+(4, 'Muhammad Sameer', 2, 45000, 1);
 
 -- --------------------------------------------------------
 
@@ -270,8 +314,17 @@ CREATE TABLE `submissions` (
   `comment` text NOT NULL,
   `submission_date` datetime NOT NULL DEFAULT current_timestamp(),
   `file` varchar(500) NOT NULL,
-  `course_id` int(11) NOT NULL
+  `course_id` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `submissions`
+--
+
+INSERT INTO `submissions` (`submission_id`, `user_id`, `assesment_id`, `comment`, `submission_date`, `file`, `course_id`, `path`, `username`) VALUES
+(6, 3, 3, 'ok', '2023-06-10 04:51:21', '648463b9e2b0c5.92495509.pdf', 1, '../uploads/submissions/648463b9e2b0c5.92495509.pdf', 'Abdullah');
 
 -- --------------------------------------------------------
 
@@ -416,18 +469,20 @@ CREATE TABLE `users` (
   `degree` longblob NOT NULL,
   `picture` longblob NOT NULL,
   `hourly_rate` decimal(10,2) NOT NULL,
-  `reset_token` varchar(255) DEFAULT NULL
+  `reset_token` varchar(255) DEFAULT NULL,
+  `unique_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fname`, `lname`, `phone`, `email`, `user_type`, `password`, `verification_code`, `create_date`, `address`, `postal_code`, `area`, `country`, `state`, `ehistory`, `experience`, `degree`, `picture`, `hourly_rate`, `reset_token`) VALUES
-(1, 'admin', 'admin', 0, 'admin@gmail.com', 'Admin', '$2y$10$UvjwTyi/mRRAO/D6hRUsa..na2fvXI4jEEKd.594xoKjieSvpVUyS', '3454d24c04f25f921cc09a89cd4fb47d', '2023-05-24 20:19:22', '', '', '', '', '', '', '', '', '', '0.00', NULL),
-(2, 'Muhammad Sameer', 'sohail', 2147483647, 'sameersohail0009@gmail.com', 'Teacher', '$2y$10$tznB35g/GIF9bfpzloBnhu8656wCXl6sEaxC41xBVRMDu6//risei', '8b74831af4a533fc17a342833110b239', '2023-05-24 20:43:37', 'malik colony near high school no 1 phool nagar', '55260', 'Lahore', 'Pakistan', 'Punjab', 'nill', '2 year', 0x73616d656572284356292e706466, 0x73616d6d6d6d6d6d6d2e6a7067, '50.00', '347310'),
-(3, 'Abdullah', 'Arshad', 2147483647, 'addullaharshadchoudhary@gmail.com', 'Student', '$2y$10$2jzwtLZNDlvcY2hg3Tjo3uHpoF1ThPGnSdxx.zsyVe0WLTwtCByEi', 'cec5f1f8351c1a628c566cd5020e20d3', '2023-05-24 21:20:01', 'kot peer fazal shah', '55260', 'Lahore', 'Pakistan', 'Punjab', '', '', '', 0x63682e6a7067, '0.00', NULL),
-(4, 'Jawad', 'Ahmed', 3177631, 'jawad.ahmed.dillhow56@gmail.com', 'Teacher', '$2y$10$On.IBrZJsy7WRaNt9EIksOrZx.DU106FOSPPUi4yR77tK85PynjBO', 'b60f74fa0e7207423bbef31450d86484', '2023-05-25 11:17:03', '', '', '', '', '', '', '', '', '', '0.00', NULL);
+INSERT INTO `users` (`id`, `fname`, `lname`, `phone`, `email`, `user_type`, `password`, `verification_code`, `create_date`, `address`, `postal_code`, `area`, `country`, `state`, `ehistory`, `experience`, `degree`, `picture`, `hourly_rate`, `reset_token`, `unique_id`) VALUES
+(1, 'admin', 'admin', 0, 'admin@gmail.com', 'Admin', '$2y$10$UvjwTyi/mRRAO/D6hRUsa..na2fvXI4jEEKd.594xoKjieSvpVUyS', '3454d24c04f25f921cc09a89cd4fb47d', '2023-05-24 20:19:22', '', '', '', '', '', '', '', '', '', 0.00, NULL, ''),
+(2, 'Muhammad Sameer', 'sohail', 2147483647, 'sameersohail0009@gmail.com', 'Teacher', '$2y$10$tznB35g/GIF9bfpzloBnhu8656wCXl6sEaxC41xBVRMDu6//risei', '8b74831af4a533fc17a342833110b239', '2023-05-24 20:43:37', 'malik colony near high school no 1 phool nagar', '55260', 'Lahore', 'Pakistan', 'Punjab', 'nill', '2 year', 0x73616d656572284356292e706466, 0x73616d6d6d6d6d6d6d2e6a7067, 50.00, '347310', ''),
+(3, 'Abdullah', 'Arshad', 2147483647, 'addullaharshadchoudhary@gmail.com', 'Student', '$2y$10$2jzwtLZNDlvcY2hg3Tjo3uHpoF1ThPGnSdxx.zsyVe0WLTwtCByEi', 'cec5f1f8351c1a628c566cd5020e20d3', '2023-05-24 21:20:01', 'kot peer fazal shah', '55260', 'Lahore', 'Pakistan', 'Punjab', '', '', '', 0x63682e6a7067, 0.00, NULL, ''),
+(4, 'Jawad', 'Ahmed', 3177631, 'jawad.ahmed.dillhow56@gmail.com', 'Teacher', '$2y$10$On.IBrZJsy7WRaNt9EIksOrZx.DU106FOSPPUi4yR77tK85PynjBO', 'b60f74fa0e7207423bbef31450d86484', '2023-05-25 11:17:03', '', '', '', '', '', '', '', '', '', 0.00, NULL, ''),
+(5, 'talha', 'jawad', 123423, 'talha@gmail.com', 'Student', '$2y$10$Z57QeC1wrnuDF/mZgGQ/IOQMkI4B7okisWUd/y20RdXOrB6/KbFei', '191eb8ad842a0c8e0889115635ba941a', '2023-06-11 03:37:47', '', '', '', '', '', '', '', '', '', 0.00, NULL, '6485a3fb029bc');
 
 --
 -- Indexes for dumped tables
@@ -464,6 +519,12 @@ ALTER TABLE `enrolmentt`
   ADD PRIMARY KEY (`enrolment_id`);
 
 --
+-- Indexes for table `grades`
+--
+ALTER TABLE `grades`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `payment`
 --
 ALTER TABLE `payment`
@@ -479,6 +540,12 @@ ALTER TABLE `quiz_questions`
 -- Indexes for table `quiz_results`
 --
 ALTER TABLE `quiz_results`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `salary`
+--
+ALTER TABLE `salary`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -525,7 +592,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `assesment`
 --
 ALTER TABLE `assesment`
-  MODIFY `assesment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `assesment_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `class_schedule`
@@ -537,43 +604,55 @@ ALTER TABLE `class_schedule`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `course_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `course_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `course_content`
 --
 ALTER TABLE `course_content`
-  MODIFY `content_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `content_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `enrolmentt`
 --
 ALTER TABLE `enrolmentt`
-  MODIFY `enrolment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `enrolment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `grades`
+--
+ALTER TABLE `grades`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `quiz_questions`
 --
 ALTER TABLE `quiz_questions`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `quiz_results`
 --
 ALTER TABLE `quiz_results`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `salary`
+--
+ALTER TABLE `salary`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `submissions`
 --
 ALTER TABLE `submissions`
-  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `submission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tblsubjects`
@@ -603,7 +682,7 @@ ALTER TABLE `tutor_reviews`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
